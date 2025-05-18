@@ -25,4 +25,10 @@ class Product < ApplicationRecord
   validates :code, :name, :price, presence: true
   validates :code, :name, uniqueness: true
   validates :price, numericality: {greater_than_or_equal_to: 0}
+
+  private
+
+  def special_offer
+    special_offers.active.first
+  end
 end

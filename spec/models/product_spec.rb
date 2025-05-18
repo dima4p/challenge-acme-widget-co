@@ -37,12 +37,45 @@ describe Product, type: :model do
 
   describe 'class methods' do
     describe 'scopes' do
-      describe '.ordered' do
+      describe '::ordered' do
         it 'orders the records of Product by :name' do
           expect(Product.ordered).to eq Product.order(:name)
         end
-      end   # .ordered
+      end   # ::ordered
     end   # scopes
   end   # class methods
 
+  describe 'private' do
+    describe '#special_offer' do
+      subject {product.send :special_offer}
+
+      context 'when #special_offers is empty' do
+        it 'returns nil' do
+          is_expected.to be nil
+        end
+      end
+
+      context 'when #special_offers is present' do
+        let!(:special_offer) do
+          create :special_offer, product_code: product.code, active: active
+        end
+
+        context 'but there is no active one' do
+          let(:active) {false}
+
+          it 'returns nil' do
+            is_expected.to be nil
+          end
+        end
+
+        context 'but there is an active one' do
+          let(:active) {true}
+
+          it 'returns it' do
+            is_expected.to eq special_offer
+          end
+        end
+      end
+    end
+  end   # private
 end
