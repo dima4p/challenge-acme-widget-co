@@ -26,6 +26,10 @@ class Product < ApplicationRecord
   validates :code, :name, uniqueness: true
   validates :price, numericality: {greater_than_or_equal_to: 0}
 
+  def price_for(quantity)
+    special_offer&.apply_to(quantity) || quantity * price
+  end
+
   private
 
   def special_offer

@@ -45,6 +45,37 @@ describe Product, type: :model do
     end   # scopes
   end   # class methods
 
+  describe '#price_for(quantity)' do
+    subject(:price_for) {product.price_for quantity}
+    let(:quantity) {rand 1..10}
+
+    it 'calls #special_offer' do
+      expect(product).to receive :special_offer
+      price_for
+    end
+
+    context 'when #special_offer returns nil' do
+      it 'returns #price multiplied by quantity' do
+        is_expected.to eq product.price * quantity
+      end
+    end
+
+    context 'when #special_offer is present' do
+      let(:special_offer) do
+        create :special_offer, product_code: product.code, active: true
+      end
+
+      before do
+        allow(product).to receive(:special_offer).and_return special_offer
+      end
+
+      it 'sends #apply_to to #special_offer with quantity and returns the result' do
+        expect(special_offer).to receive(:apply_to).with(quantity).and_return :price
+        is_expected.to be :price
+      end
+    end
+  end
+
   describe 'private' do
     describe '#special_offer' do
       subject {product.send :special_offer}
