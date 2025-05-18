@@ -38,5 +38,11 @@ module AcmeWidgetCo
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.active_record.default_column_serializer = YAML
+
+    config.generators do |g|
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+    end
   end
 end
