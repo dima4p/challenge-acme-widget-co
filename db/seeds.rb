@@ -16,3 +16,13 @@ Product
 Product
     .create_with(name: "Blue Widget", price: 7.95)
     .find_or_create_by(code: "B01")
+
+DeliveryCost
+    .create_with(price: 4.95)
+    .find_or_create_by(threshold: 0)
+DeliveryCost
+    .create_with(price: 2.95)
+    .find_or_create_by(threshold: 50)
+DeliveryCost
+    .create_with(price: 0)
+    .find_or_create_by(threshold: 90)

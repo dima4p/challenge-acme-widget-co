@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Delivery costs" %>
+
+<h1>Delivery costs</h1>
+
+<div id="delivery_costs">
+  <% @delivery_costs.each do |delivery_cost| %>
+    <%= render delivery_cost %>
+    <p>
+      <%= link_to "Show this delivery cost", delivery_cost %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New delivery cost", new_delivery_cost_path %>
