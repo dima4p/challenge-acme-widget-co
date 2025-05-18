@@ -43,12 +43,19 @@ describe SpecialOffer, type: :model do
 
   describe 'class methods' do
     describe 'scopes' do
-      describe '.ordered' do
+      describe '::ordered' do
         it 'orders the records of SpecialOffer by :product_code' do
-          expect(SpecialOffer.ordered).to eq SpecialOffer
+          expect(described_class.ordered).to eq described_class
               .order(:product_code, :activated_on)
         end
-      end   # .ordered
+      end
+
+      describe '::active' do
+        it 'returns only the records that have #active true' do
+          expect(described_class.active).to eq described_class
+              .where active: true
+        end
+      end
     end   # scopes
   end   # class methods
 

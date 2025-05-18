@@ -28,5 +28,6 @@ class SpecialOffer < ApplicationRecord
   validates :discount, numericality: {greater_than: 0, less_than_or_equal_to: 1}
 
   scope :ordered, -> { order(:product_code, :activated_on) }
+  scope :active, -> {where active: true}
 
 end
