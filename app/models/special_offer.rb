@@ -27,7 +27,14 @@ class SpecialOffer < ApplicationRecord
   validates :activated_on, :next_affected, numericality: {greater_than: 0}
   validates :discount, numericality: {greater_than: 0, less_than_or_equal_to: 1}
 
+  before_save :ensure_single_active
+
   scope :ordered, -> { order(:product_code, :activated_on) }
   scope :active, -> {where active: true}
 
+  private
+
+  def ensure_single_active
+    product.special_offers.update_all(active: false) if active?
+  end
 end

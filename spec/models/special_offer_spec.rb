@@ -41,6 +41,17 @@ describe SpecialOffer, type: :model do
     end
   end   # validations
 
+  describe 'before_save' do
+    let(:existing_offer) {create :special_offer, active: true}
+    let(:product) {existing_offer.product}
+
+    it 'ensures that #product has maximum 1 active #special_offers' do
+      expect do
+        create :special_offer, active: true, product_code: product.code
+      end.not_to change product.special_offers.active, :count
+    end
+  end
+
   describe 'class methods' do
     describe 'scopes' do
       describe '::ordered' do
