@@ -1,0 +1,5 @@
+#!/bin/bash
+
+annotate --models -i --additional-file-patterns=\
+app/controllers/%TABLE_NAME%_controller.rb,\
+spec/requests/%TABLE_NAME%_spec.rb
