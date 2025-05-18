@@ -70,4 +70,12 @@ describe SpecialOffer, type: :model do
     end   # scopes
   end   # class methods
 
+  describe '#price' do
+    subject(:price) {special_offer.price}
+    let(:product) {special_offer.product}
+
+    it 'returns #price of the #product' do
+      is_expected.to be product.price
+    end
+  end
 end

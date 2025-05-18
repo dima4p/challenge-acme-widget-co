@@ -23,6 +23,8 @@ class SpecialOffer < ApplicationRecord
 
   belongs_to :product, required: true, foreign_key: :product_code, primary_key: :code
 
+  delegate :price, to: :product
+
   validates :product, :activated_on, :discount, :next_affected, presence: true
   validates :activated_on, :next_affected, numericality: {greater_than: 0}
   validates :discount, numericality: {greater_than: 0, less_than_or_equal_to: 1}
