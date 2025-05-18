@@ -26,3 +26,7 @@ DeliveryCost
 DeliveryCost
     .create_with(price: 0)
     .find_or_create_by(threshold: 90)
+
+SpecialOffer
+    .create_with(activated_on: 1, active: true, discount: 0.5, next_affected: 1)
+    .find_or_create_by(product_code: 'R01')
