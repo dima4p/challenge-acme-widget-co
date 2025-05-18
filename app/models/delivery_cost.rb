@@ -15,4 +15,10 @@ class DeliveryCost < ApplicationRecord
   validates :threshold, :price, presence: true
   validates :threshold, uniqueness: true
   validates :price, :threshold, numericality: {greater_than_or_equal_to: 0}
+
+  class << self
+    def add_to(amount)
+      ordered.where("threshold < ?", amount).last&.price.to_d + amount
+    end
+  end
 end

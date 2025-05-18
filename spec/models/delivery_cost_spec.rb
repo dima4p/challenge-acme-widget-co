@@ -25,12 +25,56 @@ describe DeliveryCost, type: :model do
 
   describe 'class methods' do
     describe 'scopes' do
-      describe '.ordered' do
+      describe '.::ordered' do
         it 'orders the records of DeliveryCost by :threshold' do
           expect(DeliveryCost.ordered).to eq DeliveryCost.order(:threshold)
         end
-      end   # .ordered
+      end   # ::ordered
     end   # scopes
-  end   # class methods
 
+    describe '::add_to(amount)' do
+      subject(:add_to) {described_class.add_to amount}
+      let(:amount) {10}
+      let(:ordered) {described_class.ordered}
+      let(:applicable) {ordered.where "threshold < ?", amount}
+
+      before do
+        allow(described_class).to receive(:ordered).and_return ordered
+        allow(ordered).to receive(:where).and_return applicable
+      end
+
+      it 'calls ::ordered' do
+        expect(described_class).to receive(:ordered).and_return ordered
+        add_to
+      end
+
+      it 'looks for instances where #threshold is less than amount' do
+        expect(ordered).to receive(:where)
+            .with("threshold < ?", amount)
+            .and_call_original
+        add_to
+      end
+
+      it 'takes the last one of the found instances' do
+        expect(applicable).to receive(:last).and_call_original
+        add_to
+      end
+
+      context 'when there is nothing found' do
+        it 'returns amount' do
+          is_expected.to eq amount
+        end
+      end
+
+      context 'when an instances is found' do
+        let!(:less) {create :delivery_cost, threshold: 0, price: 3}
+        let!(:equal) {create :delivery_cost, threshold: amount, price: 2}
+        let!(:greater) {create :delivery_cost, threshold: amount + 0.01, price: 1}
+
+        it 'returns the sum of amount and #price of the found instance' do
+          is_expected.to eq amount + less.price
+        end
+      end
+    end
+  end   # class methods
 end
