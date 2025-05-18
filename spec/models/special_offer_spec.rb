@@ -70,6 +70,61 @@ describe SpecialOffer, type: :model do
     end   # scopes
   end   # class methods
 
+  describe 'apply_to(quantity)' do
+    subject(:apply_to) {special_offer.apply_to quantity}
+    let(:quantity) {rand 1..50}
+    let(:step) {special_offer.send :step}
+    let(:number_of_steps) {quantity / step}
+
+    before do
+      allow(special_offer).to receive(:coefficient)
+          .and_call_original
+    end
+
+    it 'calls #coefficient without arguments' do
+      expect(special_offer).to receive(:coefficient)
+          .with(no_args).and_call_original
+      apply_to
+    end
+
+    context 'when quantity is less then #step' do
+      let(:quantity) {rand 1..(step - 1)}
+      let(:step) {special_offer.send :step}
+
+      it 'calls #coefficient with quantity' do
+        expect(special_offer).to receive(:coefficient)
+            .with(quantity)
+            .and_call_original
+        apply_to
+      end
+    end
+
+    context 'when quantity is a multiple of #step' do
+      let(:quantity) {rand(1..5) * step}
+
+      it 'calls #coefficient with 0' do
+        expect(special_offer).to receive(:coefficient)
+            .with(0)
+            .and_call_original
+        apply_to
+      end
+    end
+
+    context 'after these calls' do
+      before do
+        allow(special_offer).to receive(:coefficient)
+            .with(no_args).and_return 1
+        allow(special_offer).to receive(:coefficient)
+            .with(any_args).and_return 10
+        allow(special_offer).to receive(:price).and_return 1
+      end
+
+      it 'returns #price multiplied by the sum of the result of the call #coefficient with argument and the result of the call #coefficient without argument where the last is multiplied by integer division of quantity by #step' do
+        is_expected.to eq special_offer.price * (10 * number_of_steps + 10)
+      end
+    end
+  end
+
   describe '#price' do
     subject(:price) {special_offer.price}
     let(:product) {special_offer.product}
@@ -78,4 +133,50 @@ describe SpecialOffer, type: :model do
       is_expected.to be product.price
     end
   end
+
+  describe 'private' do
+    describe '#coefficient(quantity = step)' do
+      subject(:coefficient) {special_offer.send :coefficient, quantity}
+      let(:special_offer) do
+        create :special_offer,
+            activated_on: activated_on,
+            next_affected: next_affected
+      end
+      let(:activated_on) {rand 2..4}
+      let(:next_affected) {rand 2..4}
+
+      context 'when quantity is less than #activated_on' do
+        let(:quantity) {rand 1..(activated_on - 1)}
+
+        it 'returns quantity' do
+          is_expected.to be quantity
+        end
+      end
+
+      context 'when quantity equals to #activated_on' do
+        let(:quantity) {activated_on}
+
+        it 'returns quantity' do
+          is_expected.to be quantity
+        end
+      end
+
+      context 'when quantity is greater than #activated_on' do
+        let(:quantity) {activated_on + rand(1..(next_affected))}
+
+        it 'returns #activated_on plus (#quantity - #activated_on) multiplied by 1 - #discount' do
+          is_expected.to eq activated_on +
+              (quantity - activated_on) * (1 - special_offer.discount)
+        end
+      end
+    end
+
+    describe '#step' do
+      subject(:step) {special_offer.send :step}
+
+      it 'returns #activated_on + #next_affected' do
+        is_expected.to be special_offer.activated_on + special_offer.next_affected
+      end
+    end
+  end   # private
 end

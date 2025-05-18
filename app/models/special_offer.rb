@@ -34,9 +34,25 @@ class SpecialOffer < ApplicationRecord
   scope :ordered, -> { order(:product_code, :activated_on) }
   scope :active, -> {where active: true}
 
+  def apply_to(quantity)
+    (quantity / step * coefficient + coefficient(quantity % step)) * price
+  end
+
   private
+
+  def coefficient(quantity = step)
+    if quantity <= activated_on
+      quantity
+    else
+      activated_on + (quantity - activated_on) * (1 - discount)
+    end
+  end
 
   def ensure_single_active
     product.special_offers.update_all(active: false) if active?
+  end
+
+  def step
+    activated_on + next_affected
   end
 end

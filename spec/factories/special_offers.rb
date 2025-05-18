@@ -23,8 +23,8 @@ FactoryBot.define do
   factory :special_offer do
     association :product, factory: :product
     product_code {create(:product).code}
-    sequence(:activated_on) {|n| "1#{format '%03d', n}" }
-    sequence(:next_affected) {|n| "2#{format '%03d', n}" }
+    sequence(:activated_on) {rand 1..4}
+    sequence(:next_affected) {rand 1..4}
     discount { rand 0.001..1.0 }
     active { false }
   end
