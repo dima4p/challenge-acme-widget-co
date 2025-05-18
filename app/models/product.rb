@@ -17,6 +17,11 @@ class Product < ApplicationRecord
 
   scope :ordered, -> { order(:name) }
 
+  has_many :special_offers, -> {ordered},
+      foreign_key: :product_code,
+      primary_key: :code,
+      dependent: :destroy
+
   validates :code, :name, :price, presence: true
   validates :code, :name, uniqueness: true
   validates :price, numericality: {greater_than_or_equal_to: 0}

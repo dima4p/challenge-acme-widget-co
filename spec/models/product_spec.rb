@@ -27,6 +27,12 @@ describe Product, type: :model do
     it {is_expected.to validate_uniqueness_of :code}
     it {is_expected.to validate_uniqueness_of :name}
     it {is_expected.to validate_numericality_of(:price).is_greater_than_or_equal_to 0}
+    it do
+      is_expected.to have_many(:special_offers)
+          .with_primary_key(:code)
+          .with_foreign_key(:product_code)
+          .dependent(:destroy)
+    end
   end   # validations
 
   describe 'class methods' do
