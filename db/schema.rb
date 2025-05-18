@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_18_084027) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_18_100048) do
   create_table "delivery_costs", force: :cascade do |t|
     t.decimal "threshold", precision: 18, scale: 2
     t.decimal "price", precision: 18, scale: 2
@@ -24,5 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_18_084027) do
     t.decimal "price", precision: 18, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_products_on_code", unique: true
   end
 end

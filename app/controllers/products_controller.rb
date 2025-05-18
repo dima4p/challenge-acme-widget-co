@@ -9,6 +9,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_products_on_code  (code) UNIQUE
+#
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
 
