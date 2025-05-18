@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :special_offers
   resources :products
   resources :delivery_costs
 

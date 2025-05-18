@@ -1,0 +1,55 @@
+# == Schema Information
+#
+# Table name: special_offers
+#
+#  id            :integer          not null, primary key
+#  activated_on  :integer
+#  active        :boolean          default(FALSE), not null
+#  discount      :decimal(5, 4)
+#  next_affected :integer
+#  product_code  :string           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+# Indexes
+#
+#  index_special_offers_on_product_code  (product_code)
+#
+# Foreign Keys
+#
+#  product_code  (product_code => products.code)
+#
+require 'rails_helper'
+
+describe SpecialOffer, type: :model do
+
+  subject(:special_offer) { create :special_offer }
+
+  describe 'validations' do
+    it { is_expected.to be_valid }
+    it {is_expected.to belong_to :product}
+    it {is_expected.to validate_presence_of :activated_on}
+    it {is_expected.to validate_presence_of :discount}
+    it {is_expected.to validate_presence_of :next_affected}
+    it {is_expected.to validate_presence_of :product}
+    it {is_expected.to validate_numericality_of(:activated_on).is_greater_than 0}
+    it {is_expected.to validate_numericality_of(:next_affected).is_greater_than 0}
+    it do
+      is_expected.to validate_numericality_of(:discount)
+          .is_greater_than(0)
+          .is_less_than_or_equal_to 1
+    end
+  end   # validations
+
+  describe 'class methods' do
+    describe 'scopes' do
+      describe '.ordered' do
+        it 'orders the records of SpecialOffer by :product_code' do
+          expect(SpecialOffer.ordered).to eq SpecialOffer
+              .order(:product_code, :activated_on)
+        end
+      end   # .ordered
+    end   # scopes
+  end   # class methods
+
+end

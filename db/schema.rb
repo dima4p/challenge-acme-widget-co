@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_18_100048) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_18_103741) do
   create_table "delivery_costs", force: :cascade do |t|
     t.decimal "threshold", precision: 18, scale: 2
     t.decimal "price", precision: 18, scale: 2
@@ -26,4 +26,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_18_100048) do
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_products_on_code", unique: true
   end
+
+  create_table "special_offers", force: :cascade do |t|
+    t.string "product_code", null: false
+    t.integer "activated_on"
+    t.integer "next_affected"
+    t.decimal "discount", precision: 5, scale: 4
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_code"], name: "index_special_offers_on_product_code"
+  end
+
+  add_foreign_key "special_offers", "products", column: "product_code", primary_key: "code"
 end
