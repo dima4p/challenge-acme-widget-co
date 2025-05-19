@@ -7,7 +7,7 @@ describe "products/show.html.erb", type: :view do
     assign :product, product
   end
 
-  it "renders attributes in dl>dd" do
+  it "renders attributes in p" do
     render
     assert_select 'p.name', text: Regexp.new(product.name.to_s)
     assert_select 'p.code', text: Regexp.new(product.code.to_s)

@@ -103,30 +103,30 @@ describe Basket, type: :model do
             product: rw
       end
 
-      context 'case [B01, G01] gives' do
+      context 'case [B01, G01]' do
         let(:state) {{'B01' => 1, 'G01' => 1}}
-        it '$37.85' do
+        it 'gives $37.85' do
           is_expected.to eq 37.85
         end
       end
 
-      context 'case [R01, R01] gives' do
+      context 'case [R01, R01]' do
         let(:state) {{'R01' => 2}}
-        it '$54.37' do
+        it 'gives $54.37' do
           is_expected.to eq 54.37
         end
       end
 
-      context 'case [R01, G01] gives' do
+      context 'case [R01, G01]' do
         let(:state) {{'R01' => 1, 'G01' => 1}}
-        it '$60.85' do
+        it 'gives $60.85' do
           is_expected.to eq 60.85
         end
       end
 
-      context 'case [B01, B01, R01, R01, R01] gives' do
+      context 'case [B01, B01, R01, R01, R01]' do
         let(:state) {{'B01' => 2, 'R01' => 3}}
-        it '$98.27' do
+        it 'gives $98.27' do
           is_expected.to eq 98.27
         end
       end

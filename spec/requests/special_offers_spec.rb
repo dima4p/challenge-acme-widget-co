@@ -33,7 +33,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-describe "/special_offers", type: :request do
+describe "Requests to /special_offers", type: :request do
 
   # This should return the minimal set of attributes required to create a valid
   # SpecialOffer. As you add validations to SpecialOffer, be sure to

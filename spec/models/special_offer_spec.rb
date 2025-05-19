@@ -70,7 +70,7 @@ describe SpecialOffer, type: :model do
     end   # scopes
   end   # class methods
 
-  describe 'apply_to(quantity)' do
+  describe '#apply_to(quantity)' do
     subject(:apply_to) {special_offer.apply_to quantity}
     let(:quantity) {rand 1..50}
     let(:step) {special_offer.send :step}
@@ -123,7 +123,7 @@ describe SpecialOffer, type: :model do
         is_expected.to eq special_offer.price * (10 * number_of_steps + 10)
       end
     end
-  end
+  end   #apply_to(quantity)
 
   describe '#price' do
     subject(:price) {special_offer.price}
