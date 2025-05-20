@@ -123,7 +123,7 @@ describe SpecialOffer, type: :model do
         is_expected.to eq special_offer.price * (10 * number_of_steps + 10)
       end
     end
-  end   #apply_to(quantity)
+  end   # apply_to(quantity)
 
   describe '#price' do
     subject(:price) {special_offer.price}

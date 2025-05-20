@@ -14,8 +14,8 @@ class Basket
 
   def total
     DeliveryCost.add_to(
-      state.keys.map do |key|
-        Product.find_by(code: key).price_for state[key]
+      state.map do |product_code, quantity|
+        Product.find_by(code: product_code).price_for quantity
       end.reduce(:+)
     )&.floor 2
   end
