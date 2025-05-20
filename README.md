@@ -78,3 +78,20 @@ bundle exec rails server
 To run the specs use the command `bundle exec rspec -c -fd`.
 
 The project user the gem `guard`. Therefore to run all the tests run the command `bundle exec guard` and when the prompt have appeared just press the key "Enter".
+
+## How it works
+
+Since every `SpecialOffer` is related only to only one `Product` it is possible to calculate the total price for each `Product` independent. That is being done by the method `Product#price_for` that receives the quantity of this product and returns the total price for the given quantity.
+
+It is implemented that each `Product` may have not more than one *active* `SpecialOffer`.
+The private method `Product#special_offer` returns the one if it exists. In this case the calculation of the thotal price is delegated to the method `SpecialOffer#apply_to` sending the quantity to it. Otherwise `Product#price_for` just returns the multiplication of the quantity and the `#price`.
+
+The class `SpecialOffer` has the three important important attributes besides `#active` and `#product_code`. They are:
+
+* `#activated_on` that determines how many products must be bought to trigger the discount for the following ones;
+* `#discount` that determines the discount as a number between 0 and 1;
+* `#next_affected` that determines how many following items will be discounted.
+
+The method `Basket#total` sums the results of all `Product#price_for` and sends it to `DeliveryCost::add_to` that calculates the cost of the delivery depending on the given amount and returns the sum of the given amount and the calculated delivery cost. It is only left to get rid of extra numbers after the dot at the end.
+
+P.S. To read the exact information just run `bundle exec rspec -c -fd` ;-)
